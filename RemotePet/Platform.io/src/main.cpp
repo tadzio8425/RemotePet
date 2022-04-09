@@ -3,6 +3,34 @@
 #include <HX711.h>
 #include "BH1750FVI.h"
 
+// ### Configuración del WIFI ### //
+#define WIFI_NETWORK "CityU-WIFI-24G-T1-P26"
+#define WIFI_PASSWORD "CityU2018*"
+#define WIFI_TIMEOUT_MS 20000
+
+void connectToWiFi(){
+  Serial.print("Connecting to WiFi...");
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_NETWORK, WIFI_PASSWORD);
+
+  unsigned long startAttemptTime = millis();
+
+  while(WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < WIFI_TIMEOUT_MS){
+    Serial.print(".");
+    delay(100);
+  }
+
+  if(WiFi.status() != WL_CONNECTED){
+    Serial.println("Failed!");
+  
+  }
+  else{
+    Serial.print("Connected!");
+    Serial.println(WiFi.localIP());
+  }
+  }
+
+
 // ### Lista de pines ### //
 
 // HX711 (Galga) circuit wiring
@@ -88,6 +116,8 @@ void setup()
 
   //Ajustes del sensor de agua (Water Sensor)
   waterSensor.setUp(WS_S);
+
+  connectToWiFi();
 }
 
 void loop()
