@@ -12,6 +12,8 @@ const float calibration_factor = 20780.0;
 float units;
 
 // GY30 (Light) circuit wiring
+const int GY30_SDA = 21;
+const int GY30_SCL = 22;
 
 // ### Lista de clases ### //
 class Galga : public HX711
