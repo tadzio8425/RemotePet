@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <HX711.h>
+#include "BH1750FVI.h"
 
 // ### Lista de pines ### //
 
@@ -8,8 +9,9 @@
 const int LOADCELL_DOUT_PIN = 19;
 const int LOADCELL_SCK_PIN = 18;
 const float calibration_factor = 20780.0;
-
 float units;
+
+// GY30 (Light) circuit wiring
 
 // ### Lista de clases ### //
 class Galga : public HX711
@@ -36,20 +38,37 @@ public:
 private:
 };
 
+class GY30 : public BH1750FVI
+{
+public:
+  GY30(int i):BH1750FVI(i){};
+  void setUp(){
+    powerOn();
+    setContLowRes();
+  }
+  float getLight(){
+    return getLux();
+  }
+private:
+
+};
+
 // ### Instanciación de sensores y actuadores ### //
-Galga galga; // Galga de peso
+Galga weightSensor; // Galga de peso
+GY30 lightSensor(0x23);
 
 void setup()
 {
   Serial.begin(9600);
 
   // Ajustes de la Galga de Peso (Pines, scala y offset)
-  galga.setUp(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN, calibration_factor);
+  weightSensor.setUp(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN, calibration_factor);
+
+  // Ajustes del sensor de luz en el ambiente (GY30)
+  lightSensor.setUp();
 }
 
 void loop()
 {
-    Serial.print(galga.getWeight());
-    Serial.println();
-    delay(100);
+
 }
