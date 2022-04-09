@@ -2,33 +2,58 @@
 #include <WiFi.h>
 #include <HX711.h>
 #include "BH1750FVI.h"
+#include <WebSocketsServer.h>
 
 // ### Configuración del WIFI ### //
 #define WIFI_NETWORK "CityU-WIFI-24G-T1-P26"
 #define WIFI_PASSWORD "CityU2018*"
 #define WIFI_TIMEOUT_MS 20000
 
-void connectToWiFi(){
-  Serial.print("Connecting to WiFi...");
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(WIFI_NETWORK, WIFI_PASSWORD);
 
-  unsigned long startAttemptTime = millis();
+// ### Configuración del socket webserver ### //
+WebSocketsServer webSocket = WebSocketsServer(80); //Puerto de salida
 
-  while(WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < WIFI_TIMEOUT_MS){
-    Serial.print(".");
-    delay(100);
-  }
+//Función que se llama cuando se desea enviar un socket
+void onWebSocketEvent(uint8_t num,
+                      WStype_t type,
+                      uint8_t * payload,
+                      size_t length) {
 
-  if(WiFi.status() != WL_CONNECTED){
-    Serial.println("Failed!");
-  
+  // Figure out the type of WebSocket event
+  switch(type) {
+
+    // Client has disconnected
+    case WStype_DISCONNECTED:
+      Serial.printf("[%u] Disconnected!\n", num);
+      break;
+
+    // New client has connected
+    case WStype_CONNECTED:
+      {
+        IPAddress ip = webSocket.remoteIP(num);
+        Serial.printf("[%u] Connection from ", num);
+        Serial.println(ip.toString());
+      }
+      break;
+
+    // Echo text message back to client
+    case WStype_TEXT:
+      Serial.printf("[%u] Text: %s\n", num, payload);
+      webSocket.sendTXT(num, payload);
+      break;
+
+    // For everything else: do nothing
+    case WStype_BIN:
+    case WStype_ERROR:
+    case WStype_FRAGMENT_TEXT_START:
+    case WStype_FRAGMENT_BIN_START:
+    case WStype_FRAGMENT:
+    case WStype_FRAGMENT_FIN:
+    default:
+      break;
   }
-  else{
-    Serial.print("Connected!");
-    Serial.println(WiFi.localIP());
-  }
-  }
+}
+
 
 
 // ### Lista de pines ### //
@@ -104,6 +129,31 @@ Galga weightSensor;
 GY30 lightSensor(0x23);
 WaterSensor waterSensor;
 
+// ### Funciones auxiliares ### //
+void connectToWiFi(){
+  Serial.print("Connecting to WiFi...");
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_NETWORK, WIFI_PASSWORD);
+
+  unsigned long startAttemptTime = millis();
+
+  while(WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < WIFI_TIMEOUT_MS){
+    Serial.print(".");
+    delay(100);
+  }
+
+  if(WiFi.status() != WL_CONNECTED){
+    Serial.println("Failed!");
+  
+  }
+  else{
+    Serial.print("Connected!");
+    Serial.println(WiFi.localIP());
+  }
+  }
+
+
+// ### MAIN ### //
 void setup()
 {
   Serial.begin(9600);
@@ -117,10 +167,15 @@ void setup()
   //Ajustes del sensor de agua (Water Sensor)
   waterSensor.setUp(WS_S);
 
+  //Conectar a WiFi
   connectToWiFi();
+
+  //Iniciar el WebSocket Server
+  webSocket.begin();
+  webSocket.onEvent(onWebSocketEvent);
 }
 
 void loop()
 {
-
+  webSocket.loop();
 }
