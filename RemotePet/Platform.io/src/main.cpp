@@ -3,10 +3,11 @@
 #include <HX711.h>
 #include "BH1750FVI.h"
 #include <WebSocketsServer.h>
+#include <Servo.h>
 
 // ### Configuración del WIFI ### //
-#define WIFI_NETWORK "CityU-WIFI-24G-T1-P26"
-#define WIFI_PASSWORD "CityU2018*"
+#define WIFI_NETWORK "COMPETENCE"
+#define WIFI_PASSWORD "Mafu2408"
 #define WIFI_TIMEOUT_MS 20000
 
 
@@ -61,7 +62,7 @@ void onWebSocketEvent(uint8_t num,
 // HX711 (Galga) circuit wiring
 const int LOADCELL_DOUT_PIN = 19;
 const int LOADCELL_SCK_PIN = 18;
-const float calibration_factor = 20780.0;
+const float calibration_factor = 41800;
 float units;
 
 // GY30 (Light) circuit wiring
@@ -70,6 +71,14 @@ const int GY30_SCL = 22;
 
 // Water Sensor Circuit Wiring
 const int WS_S = 2;
+
+//Servo motores
+const int food_servo_pwm = 27;
+const int water_servo_pwm = 26;
+int minUs = 1000;
+int maxUs = 2000;
+int pos = 0;
+bool once = true;
 
 // ### Lista de clases ### //
 class Galga : public HX711
@@ -124,10 +133,27 @@ class WaterSensor{
     int _analogPin;
 };
 
+class ServoM : public Servo{
+  public:
+    void setPosition(int angle){   
+
+      for (pos = 0; pos <= angle; pos += 1) { // goes from 0 degrees to 180 degrees
+		  // in steps of 1 degree
+		  write(pos);    // tell servo to go to position in variable 'pos'
+		  delay(4);             // waits 15ms for the servo to reach the position
+	    }
+
+    }
+
+};
+
 // ### Instanciación de sensores y actuadores ### //
 Galga weightSensor; 
 GY30 lightSensor(0x23);
 WaterSensor waterSensor;
+ServoM foodServo;
+ServoM waterServo;
+
 
 // ### Funciones auxiliares ### //
 void connectToWiFi(){
@@ -178,4 +204,11 @@ void setup()
 void loop()
 {
   webSocket.loop();
+
+  foodServo.attach(food_servo_pwm);
+	waterServo.attach(water_servo_pwm);
+
+  
+  foodServo.setPosition(90);
+  
 }
