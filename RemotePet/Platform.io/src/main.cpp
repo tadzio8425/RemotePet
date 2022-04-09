@@ -15,6 +15,9 @@ float units;
 const int GY30_SDA = 21;
 const int GY30_SCL = 22;
 
+// Water Sensor Circuit Wiring
+const int WS_S = 2;
+
 // ### Lista de clases ### //
 class Galga : public HX711
 {
@@ -55,9 +58,23 @@ private:
 
 };
 
+class WaterSensor{
+  public:
+    void setUp(int analogPin){
+      _analogPin = analogPin;
+      pinMode(_analogPin, INPUT);
+    }
+    float getWaterLevel(){
+      return analogRead(_analogPin);
+    }
+  private:
+    int _analogPin;
+};
+
 // ### Instanciación de sensores y actuadores ### //
-Galga weightSensor; // Galga de peso
+Galga weightSensor; 
 GY30 lightSensor(0x23);
+WaterSensor waterSensor;
 
 void setup()
 {
@@ -68,6 +85,9 @@ void setup()
 
   // Ajustes del sensor de luz en el ambiente (GY30)
   lightSensor.setUp();
+
+  //Ajustes del sensor de agua (Water Sensor)
+  waterSensor.setUp(WS_S);
 }
 
 void loop()
