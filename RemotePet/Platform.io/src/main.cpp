@@ -73,7 +73,7 @@ const int GY30_SCL = 22;
 const int WS_S = 2;
 
 //Servo motores
-const int food_servo_pwm = 27;
+const int food_servo_pwm = 25;
 const int water_servo_pwm = 26;
 int minUs = 1000;
 int maxUs = 2000;
@@ -209,6 +209,6 @@ void loop()
 	waterServo.attach(water_servo_pwm);
 
   
-  foodServo.setPosition(90);
+  Serial.println(weightSensor.getWeight());
   
 }
