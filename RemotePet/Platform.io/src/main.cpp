@@ -4,6 +4,12 @@
 #include "BH1750FVI.h"
 #include <WebSocketsServer.h>
 #include <Servo.h>
+#include <ArduinoJson.h>
+#include <sstream>
+
+// # Configuración del JSON con la información de los sensores //
+StaticJsonDocument<200> doc;
+
 
 // ### Configuración del WIFI ### //
 #define WIFI_NETWORK "COMPETENCE"
@@ -19,6 +25,8 @@ void onWebSocketEvent(uint8_t num,
                       WStype_t type,
                       uint8_t * payload,
                       size_t length) {
+
+  String payload_str = String((char*) payload);
 
   // Figure out the type of WebSocket event
   switch(type) {
@@ -70,7 +78,7 @@ const int GY30_SDA = 21;
 const int GY30_SCL = 22;
 
 // Water Sensor Circuit Wiring
-const int WS_S = 2;
+const int WS_S = 35;
 
 //Servo motores
 const int food_servo_pwm = 25;
@@ -208,7 +216,12 @@ void loop()
   foodServo.attach(food_servo_pwm);
 	waterServo.attach(water_servo_pwm);
 
-  
-  Serial.println(weightSensor.getWeight());
-  
+  //Se asignan los valores actuales de cada sensor al JSON y se envia a todos los clientes
+  doc["Sensors"]["Light"] = lightSensor.getLight();
+  doc["Sensors"]["Weight"] = weightSensor.getWeight();
+  doc["Sensors"]["Water"] = waterSensor.getWaterLevel();
+
+  String str_doc;
+  serializeJson(doc, str_doc);
+  webSocket.broadcastTXT(str_doc);
 }
