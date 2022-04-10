@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/alert_bar"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:background="@drawable/custom_rectangle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="24dp"
+        >
+
+        <HorizontalScrollView
+            android:id="@+id/alert_bar_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/custom_rectangle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:isScrollContainer="true"
+                android:orientation="horizontal"
+
+                >
+
+                <ImageButton
+                    android:id="@+id/on_off_button"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="#6200EE"
+                    android:contentDescription="On or Off "
+                    app:srcCompat="@android:drawable/ic_dialog_info" />
+
+                <ImageButton
+                    android:id="@+id/charge_button"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="#6200EE"
+                    android:contentDescription="Charging "
+                    app:srcCompat="@android:drawable/ic_dialog_info" />
+
+                <ImageButton
+                    android:id="@+id/fault_button"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="#6200EE"
+                    android:contentDescription="Fault"
+                    app:srcCompat="@android:drawable/ic_dialog_info" />
+
+                <ImageButton
+                    android:id="@+id/food_button"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="#6200EE"
+                    android:contentDescription="Fault "
+                    app:srcCompat="@android:drawable/ic_dialog_info" />
+
+                <ImageButton
+                    android:id="@+id/water_button"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="#6200EE"
+                    android:contentDescription="Fault "
+                    app:srcCompat="@android:drawable/ic_dialog_info" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/manual_feed_button"
+        android:layout_width="148dp"
+        android:layout_height="87dp"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="128dp"
+        android:layout_marginEnd="128dp"
+        android:text="Manual-Feed Pet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/alert_bar" />
+
+    <Button
+        android:id="@+id/auto_feed_button"
+        android:layout_width="135dp"
+        android:layout_height="83dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:text="Auto-Feed Pet"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/alert_bar" />
+
+    <Button
+        android:id="@+id/timer_feed_button"
+        android:layout_width="135dp"
+        android:layout_height="83dp"
+        android:layout_marginStart="184dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="16dp"
+        android:text="Timer-Feed Pet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/alert_bar" />
+
+    <Button
+        android:id="@+id/status_button"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:text="Sensor Status"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/manual_feed_button"
+        android:onClick="openSensorActivity" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/reload_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        app:backgroundTint="#7465FF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="Reload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/stat_notify_sync" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/reload_button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        android:contentDescription="Reload"
+        app:backgroundTint="#7465FF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
