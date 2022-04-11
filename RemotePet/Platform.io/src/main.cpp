@@ -107,7 +107,7 @@ public:
       units = 0.00;
     }
 
-    return units;
+    return get_units();
   }
 
 private:
@@ -224,4 +224,5 @@ void loop()
   String str_doc;
   serializeJson(doc, str_doc);
   webSocket.broadcastTXT(str_doc);
+
 }

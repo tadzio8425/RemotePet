@@ -26,8 +26,15 @@ public class SensorStatusActivity extends AppCompatActivity {
         //Se encuentra el elemento en el app de cada sensor
         ProgressBar lightView = (ProgressBar) findViewById(R.id.light_bar);
         TextView lightPercentageView = (TextView) findViewById(R.id.progress_percentage);
-        //Desempaquetamiento de los valores de los sensores
 
+        ProgressBar waterView = (ProgressBar) findViewById(R.id.water_bar);
+        TextView waterPercentageView = (TextView) findViewById(R.id.water_progress_percentage);
+
+        ProgressBar foodView = (ProgressBar) findViewById(R.id.food_bar);
+        TextView foodPercentageView = (TextView) findViewById(R.id.food_progress_percentage);
+
+
+        //Desempaquetamiento de los valores de los sensores
         int light_sensor = 0;
         int water_sensor = 0;
         int weight_sensor = 0;
@@ -45,6 +52,14 @@ public class SensorStatusActivity extends AppCompatActivity {
         //Se cambia el valor en el app
         lightView.setProgress(light_sensor);
         lightPercentageView.setText((lightView.getProgress()) + "%");
+
+        waterView.setProgress(water_sensor);
+        waterPercentageView.setText((waterView.getProgress()) + "mL");
+
+        foodView.setProgress(weight_sensor);
+        foodPercentageView.setText(foodView.getProgress() + "g");
+
+
 
     }
 
