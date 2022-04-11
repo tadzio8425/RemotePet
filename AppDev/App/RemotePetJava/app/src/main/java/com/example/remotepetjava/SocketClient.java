@@ -17,6 +17,7 @@ public class SocketClient extends tech.gusavila92.websocketclient.WebSocketClien
 
     private String _root_json_str;
     private static JSONObject _root_json;
+    public static boolean isConnected = false;
 
     public SocketClient(URI uri) {
         super(uri);
@@ -30,11 +31,17 @@ public class SocketClient extends tech.gusavila92.websocketclient.WebSocketClien
 
     @Override
     public void onTextReceived(String s) {
-        _root_json_str = s;
-        setJSON();
 
-        _root_json.has("Sensors");
-    }
+        if (s.equals("Pong.")){
+            isConnected = true;}
+
+        else{
+            _root_json_str = s;
+            setJSON();
+
+            _root_json.has("Sensors");}
+        }
+
 
     @Override
     public void onBinaryReceived(byte[] data) {
@@ -51,6 +58,7 @@ public class SocketClient extends tech.gusavila92.websocketclient.WebSocketClien
     @Override
     public void onException(Exception e) {
         System.out.println(e.getMessage());
+        isConnected = false;
     }
 
     @Override
@@ -58,6 +66,9 @@ public class SocketClient extends tech.gusavila92.websocketclient.WebSocketClien
         Log.i("WebSocket", "Closed ");
         System.out.println("onCloseReceived");
     }
+
+
+
 
     public void setJSON(){
 

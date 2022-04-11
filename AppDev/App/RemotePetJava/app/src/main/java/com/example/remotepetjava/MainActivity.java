@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import org.json.JSONObject;
 
@@ -24,6 +26,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         createWebSocketClient();
+
+        updateAlerts(null);
+    }
+
+    public void updateAlerts(View view) {
+
+        webSocketClient.send("Ping?");
+
+        ImageButton on_off_button = (ImageButton) findViewById(R.id.on_off_button);
+
+
+
+        if(SocketClient.isConnected){
+            on_off_button.setImageResource(R.mipmap.wifi_connection_img_foreground);
+        }
+
+        else{
+            on_off_button.setImageResource(R.mipmap.wifi_no_connection_img_foreground);
+        }
+
+
     }
 
     public void openSensorActivity(View view){
@@ -47,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         webSocketClient = new SocketClient(uri);
         webSocketClient.setConnectTimeout(10000);
-        webSocketClient.setReadTimeout(60000);
+        webSocketClient.setReadTimeout(5000);
         webSocketClient.enableAutomaticReconnection(5000);
         webSocketClient.connect();
     }

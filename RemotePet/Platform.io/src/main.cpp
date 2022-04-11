@@ -47,8 +47,13 @@ void onWebSocketEvent(uint8_t num,
 
     // Echo text message back to client
     case WStype_TEXT:
+
+      if(strcmp((char *) payload, "Ping?") == 0){
+        webSocket.sendTXT(num, "Pong.");
+      }
+      else{
       Serial.printf("[%u] Text: %s\n", num, payload);
-      webSocket.sendTXT(num, payload);
+      webSocket.sendTXT(num, payload);}
       break;
 
     // For everything else: do nothing
