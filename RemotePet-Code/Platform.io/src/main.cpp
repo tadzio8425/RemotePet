@@ -12,9 +12,8 @@ StaticJsonDocument<200> doc;
 
 
 // ### Configuración del WIFI ### //
-#define WIFI_NETWORK "COMPETENCE"
-#define WIFI_PASSWORD "Mafu2408"
-#define WIFI_TIMEOUT_MS 20000
+const char* ssid     = "RemotePet-Server";
+const char* password = "eusebio8425";
 
 
 // ### Configuración del socket webserver ### //
@@ -169,28 +168,6 @@ ServoM waterServo;
 
 
 // ### Funciones auxiliares ### //
-void connectToWiFi(){
-  Serial.print("Connecting to WiFi...");
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(WIFI_NETWORK, WIFI_PASSWORD);
-
-  unsigned long startAttemptTime = millis();
-
-  while(WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < WIFI_TIMEOUT_MS){
-    Serial.print(".");
-    delay(100);
-  }
-
-  if(WiFi.status() != WL_CONNECTED){
-    Serial.println("Failed!");
-  
-  }
-  else{
-    Serial.print("Connected!");
-    Serial.println(WiFi.localIP());
-  }
-  }
-
 
 // ### MAIN ### //
 void setup()
@@ -206,8 +183,15 @@ void setup()
   //Ajustes del sensor de agua (Water Sensor)
   waterSensor.setUp(WS_S);
 
-  //Conectar a WiFi
-  connectToWiFi();
+
+  // Connect to Wi-Fi network with SSID and password
+  Serial.print("Setting AP (Access Point)…");
+  // Remove the password parameter, if you want the AP (Access Point) to be open
+  WiFi.softAP(ssid, password);
+
+  IPAddress IP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(IP);
 
   //Iniciar el WebSocket Server
   webSocket.begin();

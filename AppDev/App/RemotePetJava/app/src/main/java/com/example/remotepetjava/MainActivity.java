@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         URI uri;
         try {
             // Connect to local host
-            uri = new URI("ws://192.168.1.40:80/websocket");
+            uri = new URI("ws://192.168.4.1:80/websocket");
         }
         catch (URISyntaxException e) {
             e.printStackTrace();
