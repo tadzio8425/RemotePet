@@ -15,7 +15,7 @@ StaticJsonDocument<200> doc;
 #define WIFI_NETWORK "COMPETENCE"
 #define WIFI_PASSWORD "Mafu2408"
 #define WIFI_TIMEOUT_MS 20000
-
+p
 
 // ### Configuración del socket webserver ### //
 WebSocketsServer webSocket = WebSocketsServer(80); //Puerto de salida
