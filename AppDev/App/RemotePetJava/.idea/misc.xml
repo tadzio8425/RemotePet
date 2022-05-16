@@ -8,6 +8,7 @@
         <entry key="..\:/Users/juans/AndroidStudioProjects/RemotePetJava/app/src/main/res/layout/activity_main.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/juans/AndroidStudioProjects/RemotePetJava/app/src/main/res/layout/activity_sensor_status.xml" value="0.17304625199362042" />
         <entry key="..\:/Users/juans/Desktop/Cuarto Semestre/Materiales/Proyecto/RemotePet/AppDev/App/RemotePetJava/app/src/main/res/drawable/sun_img_background.xml" value="0.124" />
+        <entry key="..\:/Users/juans/Desktop/Cuarto Semestre/Materiales/Proyecto/RemotePet/AppDev/App/RemotePetJava/app/src/main/res/layout/activity_camera_view.xml" value="0.1" />
         <entry key="..\:/Users/juans/Desktop/Cuarto Semestre/Materiales/Proyecto/RemotePet/AppDev/App/RemotePetJava/app/src/main/res/layout/activity_main.xml" value="0.4" />
         <entry key="..\:/Users/juans/Desktop/Cuarto Semestre/Materiales/Proyecto/RemotePet/AppDev/App/RemotePetJava/app/src/main/res/layout/activity_sensor_status.xml" value="0.23183760683760685" />
         <entry key="..\:/Users/juans/Desktop/Cuarto Semestre/Materiales/Proyecto/RemotePet/AppDev/App/RemotePetJava/app/src/main/res/mipmap-anydpi-v26/app_logo_img.xml" value="0.124" />
@@ -15,7 +16,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16_PREVIEW" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

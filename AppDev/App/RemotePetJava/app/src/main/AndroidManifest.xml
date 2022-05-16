@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.remotepetjava">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/app_logo_img_foreground"
@@ -9,17 +11,24 @@
         android:roundIcon="@mipmap/app_logo_img_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RemotePetJava">
+        <activity
+            android:name=".CameraView"
+            android:exported="false"
+            android:label="Camera View">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
 
         <activity
             android:name=".SensorStatusActivity"
-            android:label="Sensor Status"
-            android:exported="false">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".MainActivity" /> </activity>
-
-
-    <activity
+            android:exported="false"
+            android:label="Sensor Status">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -29,7 +38,5 @@
             </intent-filter>
         </activity>
     </application>
-
-
 
 </manifest>

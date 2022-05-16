@@ -49,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    public void openCamera(View view){
+        Intent intent = new Intent(this, CameraView.class);
+        startActivity(intent);
+    }
+
     public void openSensorActivity(View view){
 
         Intent intent = new Intent(this, SensorStatusActivity.class);
