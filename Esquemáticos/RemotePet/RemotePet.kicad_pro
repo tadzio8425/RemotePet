@@ -368,7 +368,7 @@
       "netlist": "",
       "specctra_dsn": "",
       "step": "",
-      "vrml": "RemotePet.wrl"
+      "vrml": "../../../../../../RemotePet.wrl"
     },
     "page_layout_descr_file": ""
   },
