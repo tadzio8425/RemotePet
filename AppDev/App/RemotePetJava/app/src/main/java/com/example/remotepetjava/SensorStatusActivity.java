@@ -2,6 +2,7 @@ package com.example.remotepetjava;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,8 +19,25 @@ public class SensorStatusActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_status);
-        updateSensorValues();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        final Handler ha=new Handler();
+        ha.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                //call function
+                root_json = SocketClient.getJSON();
+                updateSensorValues();
+                ha.postDelayed(this, 1);
+            }
+        }, 1);
+    }
+
+
 
     void updateSensorValues() {
 
