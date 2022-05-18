@@ -12,16 +12,9 @@ StaticJsonDocument<200> doc;
 
 
 // ### Configuración del WIFI ### //
-<<<<<<< HEAD:RemotePet/Platform.io/src/main.cpp
-#define WIFI_NETWORK "COMPETENCE"
-#define WIFI_PASSWORD "Mafu2408"
-#define WIFI_TIMEOUT_MS 20000
-p
-=======
 const char* ssid     = "RemotePet-Server";
 const char* password = "eusebio8425";
 
->>>>>>> 41a221989e212db34f1067149267dbb2fe805118:RemotePet-Code/Platform.io/src/main.cpp
 
 // ### Configuración del socket webserver ### //
 WebSocketsServer webSocket = WebSocketsServer(80); //Puerto de salida
@@ -90,6 +83,9 @@ const int GY30_SCL = 22;
 
 // Water Sensor Circuit Wiring
 const int WS_S = 35;
+
+//Sensor de movimiento PIR
+const int PIR_S = 12;
 
 //Servo motores
 const int food_servo_pwm = 25;
@@ -166,11 +162,25 @@ class ServoM : public Servo{
 
 };
 
+class PIR{
+  public:
+    void setUp(int digitalPin){
+      _digitalPin = digitalPin;
+      pinMode(_digitalPin, INPUT);
+    }
+    bool isMovement(){
+      return digitalRead(_digitalPin);
+    }
+  private:
+    int _digitalPin;
+};
+
 // ### Instanciación de sensores y actuadores ### //
 Galga weightSensor; 
 GY30 lightSensor(0x23);
 WaterSensor waterSensor;
 ServoM foodServo;
+PIR movementSensor;
 ServoM waterServo;
 
 
@@ -189,6 +199,9 @@ void setup()
 
   //Ajustes del sensor de agua (Water Sensor)
   waterSensor.setUp(WS_S);
+
+  //Ajustes del sensor de movimiento
+  movementSensor.setUp(PIR_S);
 
 
   // Connect to Wi-Fi network with SSID and password
@@ -216,9 +229,13 @@ void loop()
   doc["Sensors"]["Light"] = lightSensor.getLight();
   doc["Sensors"]["Weight"] = weightSensor.getWeight();
   doc["Sensors"]["Water"] = waterSensor.getWaterLevel();
+  doc["Sensors"]["Movement"] = movementSensor.isMovement();
 
   String str_doc;
   serializeJson(doc, str_doc);
   webSocket.broadcastTXT(str_doc);
 
+
+
+  //Sección
 }
