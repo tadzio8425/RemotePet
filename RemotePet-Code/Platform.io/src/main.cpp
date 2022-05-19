@@ -6,10 +6,19 @@
 #include <Servo.h>
 #include <ArduinoJson.h>
 #include <sstream>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 
 // # Configuración del JSON con la información de los sensores //
 StaticJsonDocument<200> doc;
 
+
+// # Configuración pantalla oled
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+#define OLED_RESET    -1
+#define SCREEN_ADDRESS 0x3C
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 // ### Configuración del WIFI ### //
 const char* ssid     = "RemotePet-Server";
@@ -142,7 +151,8 @@ class WaterSensor{
       pinMode(_analogPin, INPUT);
     }
     float getWaterLevel(){
-      return analogRead(_analogPin);
+      float waterLevel = (analogRead(_analogPin)-2385.3)/1.7371;
+      return waterLevel;
     }
   private:
     int _analogPin;
@@ -159,6 +169,25 @@ class ServoM : public Servo{
 	    }
 
     }
+
+};
+
+class MotoBomba{
+  public:
+    void setUp(int pin){
+      _pin = pin;
+      pinMode(pin, OUTPUT);
+    }
+    void turnOn(){
+      digitalWrite(_pin, HIGH);
+    }
+
+    void turnOff(){
+      digitalWrite(_pin, LOW);
+    }
+
+  private:
+    int _pin;
 
 };
 
@@ -181,7 +210,7 @@ GY30 lightSensor(0x23);
 WaterSensor waterSensor;
 ServoM foodServo;
 PIR movementSensor;
-ServoM waterServo;
+MotoBomba bombaAgua;
 
 
 // ### Funciones auxiliares ### //
@@ -190,6 +219,12 @@ ServoM waterServo;
 void setup()
 {
   Serial.begin(9600);
+
+  //Ajustes pantalla OLED
+  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+    Serial.println(F("SSD1306 allocation failed"));
+  }
+  display.clearDisplay();
 
   // Ajustes de la Galga de Peso (Pines, scala y offset)
   weightSensor.setUp(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN, calibration_factor);
@@ -214,7 +249,7 @@ void setup()
   Serial.println(IP);
 
   //Iniciar el WebSocket Server
-  webSocket.begin();
+  webSocket.begin();  
   webSocket.onEvent(onWebSocketEvent);
 }
 
@@ -223,7 +258,6 @@ void loop()
   webSocket.loop();
 
   foodServo.attach(food_servo_pwm);
-	waterServo.attach(water_servo_pwm);
 
   //Se asignan los valores actuales de cada sensor al JSON y se envia a todos los clientes
   doc["Sensors"]["Light"] = lightSensor.getLight();
@@ -238,4 +272,13 @@ void loop()
 
 
   //Sección
+  display.setTextSize(1);             // Normal 1:1 pixel scale
+  display.setTextColor(SSD1306_WHITE);        // Draw white text
+  display.setCursor(0,0);             // Start at top-left corner
+  display.println(F("RemotePet"));
+  display.display();
+
+  Serial.println(waterSensor.getWaterLevel());
+
+
 }
