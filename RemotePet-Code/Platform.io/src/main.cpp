@@ -151,7 +151,15 @@ class WaterSensor{
       pinMode(_analogPin, INPUT);
     }
     float getWaterLevel(){
-      float waterLevel = (analogRead(_analogPin)-2385.3)/1.7371;
+
+      float waterLevel;
+
+      if(analogRead(_analogPin) > 1000){
+        waterLevel = (analogRead(_analogPin)-2385.3)/1.7371;
+      }
+      else{
+        waterLevel = 0;
+      }
       return waterLevel;
     }
   private:
@@ -278,7 +286,7 @@ void loop()
   display.println(F("RemotePet"));
   display.display();
 
-  Serial.println(waterSensor.getWaterLevel());
+
 
 
 }

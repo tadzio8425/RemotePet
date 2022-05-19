@@ -71,6 +71,7 @@ public class SensorStatusActivity extends AppCompatActivity {
         lightView.setProgress(light_sensor);
         lightPercentageView.setText((lightView.getProgress()) + "%");
 
+        waterView.setMax(600);
         waterView.setProgress(water_sensor);
         waterPercentageView.setText((waterView.getProgress()) + "mL");
 
