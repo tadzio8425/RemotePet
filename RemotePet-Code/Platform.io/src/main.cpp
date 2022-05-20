@@ -305,6 +305,11 @@ void loop()
   display.println(F("RemotePet"));
   display.display();
 
+  foodServo.setPosition(40);
+  delay(2000);
+  foodServo.setPosition(2000);
+  delay(2000);
+
 
 
 
