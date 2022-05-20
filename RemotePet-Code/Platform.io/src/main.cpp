@@ -197,11 +197,11 @@ class MotoBomba{
       pinMode(pin, OUTPUT);
     }
     void turnOn(){
-      digitalWrite(_pin, LOW);
+      digitalWrite(_pin, HIGH);
     }
 
     void turnOff(){
-      digitalWrite(_pin, HIGH);
+      digitalWrite(_pin, LOW);
     }
 
   private:
@@ -308,10 +308,6 @@ void loop()
   display.setCursor(0,0);             // Start at top-left corner
   display.println(F("RemotePet"));
   display.display();
-
-
-
-
 
 
 }
