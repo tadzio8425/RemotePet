@@ -2,17 +2,22 @@ package com.example.remotepetjava;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TimePicker;
 
 import org.json.JSONObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Time;
+import java.util.Locale;
 
 import tech.gusavila92.websocketclient.WebSocketClient;
 
@@ -20,6 +25,8 @@ import tech.gusavila92.websocketclient.WebSocketClient;
 public class MainActivity extends AppCompatActivity {
 
     public static SocketClient webSocketClient;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void openTimerFeed(View view){
+        Intent intent = new Intent(this, TimerFeedActivity.class);
+        startActivity(intent);
+    }
+
     public void createWebSocketClient(){
 
         URI uri;
@@ -80,5 +92,8 @@ public class MainActivity extends AppCompatActivity {
         webSocketClient.enableAutomaticReconnection(5000);
         webSocketClient.connect();
     }
+
+
+
 
 }

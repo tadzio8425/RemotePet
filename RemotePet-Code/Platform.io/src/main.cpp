@@ -8,6 +8,16 @@
 #include <sstream>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <ESP32Time.h>
+#include <Adafruit_MLX90614.h>
+
+
+//== CHANGE THIS ============
+double new_emissivity = 0.95;
+//===========================
+
+Adafruit_MLX90614 mlx = Adafruit_MLX90614();
+
 
 // # Configuración del JSON con la información de los sensores //
 StaticJsonDocument<200> doc;
@@ -98,7 +108,7 @@ const int PIR_S = 12;
 
 //Servo motores
 const int food_servo_pwm = 25;
-const int water_servo_pwm = 26;
+const int bombaAguaPin = 16;
 int minUs = 1000;
 int maxUs = 2000;
 int pos = 0;
@@ -187,11 +197,11 @@ class MotoBomba{
       pinMode(pin, OUTPUT);
     }
     void turnOn(){
-      digitalWrite(_pin, HIGH);
+      digitalWrite(_pin, LOW);
     }
 
     void turnOff(){
-      digitalWrite(_pin, LOW);
+      digitalWrite(_pin, HIGH);
     }
 
   private:
@@ -246,6 +256,14 @@ void setup()
   //Ajustes del sensor de movimiento
   movementSensor.setUp(PIR_S);
 
+  //Bomba de agua
+  bombaAgua.setUp(bombaAguaPin);
+
+  //Ajustes sensor temperatura
+  if (!mlx.begin()) {
+    Serial.println("Error connecting to MLX sensor. Check wiring.");
+  };
+
 
   // Connect to Wi-Fi network with SSID and password
   Serial.print("Setting AP (Access Point)…");
@@ -272,11 +290,12 @@ void loop()
   doc["Sensors"]["Weight"] = weightSensor.getWeight();
   doc["Sensors"]["Water"] = waterSensor.getWaterLevel();
   doc["Sensors"]["Movement"] = movementSensor.isMovement();
+  doc["Sensors"]["AmbTemp"] =mlx.readAmbientTempC();
+  doc["Sensors"]["PetTemp"] =mlx.readObjectTempC();
 
   String str_doc;
   serializeJson(doc, str_doc);
   webSocket.broadcastTXT(str_doc);
-
 
 
   //Sección

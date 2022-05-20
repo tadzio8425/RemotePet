@@ -12,6 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RemotePetJava">
         <activity
+            android:name=".TimerFeedActivity"
+            android:exported="false"
+            android:label="Timer Feed">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".MainActivity" />
+        </activity>
+
+
+        <activity
             android:name=".CameraView"
             android:exported="false"
             android:label="Camera View">
@@ -19,7 +29,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
         <activity
             android:name=".SensorStatusActivity"
             android:exported="false"
