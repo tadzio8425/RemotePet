@@ -277,13 +277,17 @@ void setup()
   //Iniciar el WebSocket Server
   webSocket.begin();  
   webSocket.onEvent(onWebSocketEvent);
+
+  //INICIAR SERVO FOOD CERRADO
+  foodServo.attach(food_servo_pwm);
+
+  foodServo.setPosition(60);
+
 }
 
 void loop()
 {
   webSocket.loop();
-
-  foodServo.attach(food_servo_pwm);
 
   //Se asignan los valores actuales de cada sensor al JSON y se envia a todos los clientes
   doc["Sensors"]["Light"] = lightSensor.getLight();
@@ -305,10 +309,7 @@ void loop()
   display.println(F("RemotePet"));
   display.display();
 
-  foodServo.setPosition(40);
-  delay(2000);
-  foodServo.setPosition(2000);
-  delay(2000);
+
 
 
 
