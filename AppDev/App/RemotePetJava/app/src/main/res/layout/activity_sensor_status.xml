@@ -218,6 +218,73 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutAmbTemp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="70dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/custom_rectangle">
+
+                <ProgressBar
+                    android:id="@+id/ambTemp_bar"
+                    style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="55dp"
+                    android:layout_marginBottom="16dp"
+                    android:indeterminate="false"
+                    android:progressTint="#E60008"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ambientTemp_tag"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/ambientTemp_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="21dp"
+                    android:editable="false"
+                    android:text="Room Temperature"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/ambTemp_bar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/ambTemp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ambTemp_bar"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@mipmap/thermoamb_launcher_foreground" />
+
+                <TextView
+                    android:id="@+id/ambTemp_progress_percentage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginEnd="-13dp"
+                    android:text="0%"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toStartOf="@+id/ambTemp_bar"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
     </ScrollView>
 

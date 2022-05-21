@@ -148,7 +148,13 @@ public:
     setContLowRes();
   }
   float getLight(){
-    return getLux();
+    int light = getLux();
+    
+    if (light > 7600){
+      light = 7600;
+    }
+
+    return light/76;
   }
 private:
 
@@ -308,6 +314,5 @@ void loop()
   display.setCursor(0,0);             // Start at top-left corner
   display.println(F("RemotePet"));
   display.display();
-
 
 }
