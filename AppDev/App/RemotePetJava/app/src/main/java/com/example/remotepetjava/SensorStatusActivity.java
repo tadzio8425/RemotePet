@@ -56,6 +56,9 @@ public class SensorStatusActivity extends AppCompatActivity {
         ProgressBar petTemp = (ProgressBar) findViewById(R.id.petTemp_bar);
         TextView petTempPercentageView = (TextView) findViewById(R.id.petTemp_progress_percentage);
 
+        ProgressBar movementView = (ProgressBar) findViewById(R.id.move_bar);
+        TextView movementPercentageView = (TextView) findViewById(R.id.move_progress_percentage);
+
 
         //Desempaquetamiento de los valores de los sensores
         int light_sensor = 0;
@@ -63,6 +66,7 @@ public class SensorStatusActivity extends AppCompatActivity {
         int weight_sensor = 0;
         int room_temp_sensor = 0;
         int pet_temp_sensor = 0;
+        int movement_sensor = 0;
 
         try {
             JSONObject sensors_json = root_json.getJSONObject("Sensors");
@@ -71,6 +75,7 @@ public class SensorStatusActivity extends AppCompatActivity {
             water_sensor = stringToInt(sensors_json.getString("Water"));
             room_temp_sensor = stringToInt(sensors_json.getString("AmbTemp"));
             pet_temp_sensor = stringToInt(sensors_json.getString("PetTemp"));
+            movement_sensor = stringToInt(sensors_json.getString("Movement"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,6 +97,15 @@ public class SensorStatusActivity extends AppCompatActivity {
 
         petTemp.setProgress(pet_temp_sensor);
         petTempPercentageView.setText(petTemp.getProgress() + "C°");
+
+        movementView.setProgress(movement_sensor*100);
+        
+        if(movement_sensor == 1){
+        movementPercentageView.setText("Yes!");}
+        else{
+            movementPercentageView.setText("No");
+        }
+
 
 
 

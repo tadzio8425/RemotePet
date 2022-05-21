@@ -221,7 +221,7 @@ class PIR{
       _digitalPin = digitalPin;
       pinMode(_digitalPin, INPUT);
     }
-    bool isMovement(){
+    int isMovement(){
       return digitalRead(_digitalPin);
     }
   private:
@@ -314,5 +314,6 @@ void loop()
   display.setCursor(0,0);             // Start at top-left corner
   display.println(F("RemotePet"));
   display.display();
+
 
 }
