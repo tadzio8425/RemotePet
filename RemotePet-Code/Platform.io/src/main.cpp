@@ -30,9 +30,9 @@ bool inInterval = false;
 int intervalCount = 0;
 bool timeSet = false;
 long long start_time;
-int hour;
-int minute;
-int intervalo;
+int hour = 50;
+int minute = 80;
+int intervalo = 100;
 
 // # Configuración pantalla oled
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
@@ -65,6 +65,8 @@ String getValue(String data, char separator, int index)
     }
     return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
+
+
 
 //Función que se llama cuando se desea enviar un socket
 void onWebSocketEvent(uint8_t num,
@@ -151,6 +153,12 @@ int minUs = 1000;
 int maxUs = 2000;
 int pos = 0;
 bool once = true;
+int last_pos = 0;
+
+//Tiempo para motores
+unsigned long previousMillis = 0;  
+const long food_interval = 10000;  
+
 
 // ### Lista de clases ### //
 class Galga : public HX711
@@ -224,12 +232,24 @@ class ServoM : public Servo{
   public:
     void setPosition(int angle){   
 
-      for (pos = 0; pos <= angle; pos += 1) { // goes from 0 degrees to 180 degrees
+
+      if (angle > last_pos){
+      for (pos = last_pos; pos <= angle; pos += 1) { // goes from 0 degrees to 180 degrees
 		  // in steps of 1 degree
 		  write(pos);    // tell servo to go to position in variable 'pos'
 		  delay(4);             // waits 15ms for the servo to reach the position
 	    }
 
+    }
+    
+      else{
+      for (pos = last_pos; pos >= angle; pos -= 1) { // goes from 0 degrees to 180 degrees
+		  // in steps of 1 degree
+		  write(pos);    // tell servo to go to position in variable 'pos'
+		  delay(4);             // waits 15ms for the servo to reach the position
+	    }
+      }
+    last_pos = angle;
     }
 
 };
@@ -359,4 +379,22 @@ void loop()
   display.display();
 
 
+  unsigned long currentMillis = millis();
+  
+    if (currentMillis - previousMillis >= food_interval) {
+      // save the last time you blinked the LED
+      previousMillis = currentMillis;
+
+      if(rtc.getHour() == hour && rtc.getMinute() == minute){
+      
+      if(last_pos == 60){ 
+      foodServo.setPosition(110);}
+
+      else{
+        foodServo.setPosition(60);
+      }
+  }}
+
+
+    
 }

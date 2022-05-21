@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         webSocketClient = new SocketClient(uri);
-        webSocketClient.setConnectTimeout(10000);
+        webSocketClient.setConnectTimeout(1000);
         webSocketClient.setReadTimeout(5000);
         webSocketClient.enableAutomaticReconnection(5000);
         webSocketClient.connect();

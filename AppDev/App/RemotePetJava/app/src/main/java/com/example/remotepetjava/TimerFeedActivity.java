@@ -47,6 +47,6 @@ public class TimerFeedActivity extends AppCompatActivity {
         float hourly_interval = hourly_slider.getValue();
 
         MainActivity.webSocketClient.send("INTERVAL START"+":"+hour+":"+minute+":"+hourly_interval);
-            
+
     };
 }
