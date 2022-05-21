@@ -99,7 +99,7 @@ public class SensorStatusActivity extends AppCompatActivity {
         petTempPercentageView.setText(petTemp.getProgress() + "C°");
 
         movementView.setProgress(movement_sensor*100);
-        
+
         if(movement_sensor == 1){
         movementPercentageView.setText("Yes!");}
         else{
