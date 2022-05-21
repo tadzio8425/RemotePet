@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Calendar;
+
 import tech.gusavila92.websocketclient.WebSocketClient;
 
 
@@ -27,6 +29,11 @@ public class SocketClient extends tech.gusavila92.websocketclient.WebSocketClien
     public void onOpen() {
         Log.i("WebSocket", "Session is starting");
         this.send("Hello, I am the RemotePet app!");
+        Calendar calendar = Calendar.getInstance();
+        long hour24hrs = calendar.getTimeInMillis();
+
+        this.send("APPLICATION TIME");
+        this.send(""+ hour24hrs);
     }
 
     @Override

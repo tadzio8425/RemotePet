@@ -19,9 +19,20 @@ double new_emissivity = 0.95;
 Adafruit_MLX90614 mlx = Adafruit_MLX90614();
 
 
+//Configuración del reloj interno
+ESP32Time rtc(0); 
+
 // # Configuración del JSON con la información de los sensores //
 StaticJsonDocument<200> doc;
 
+//Variables de ayuda
+bool inInterval = false;
+int intervalCount = 0;
+bool timeSet = false;
+long long start_time;
+int hour;
+int minute;
+int intervalo;
 
 // # Configuración pantalla oled
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
@@ -37,6 +48,23 @@ const char* password = "eusebio8425";
 
 // ### Configuración del socket webserver ### //
 WebSocketsServer webSocket = WebSocketsServer(80); //Puerto de salida
+
+//Función auxiliar
+String getValue(String data, char separator, int index)
+{
+    int found = 0;
+    int strIndex[] = { 0, -1 };
+    int maxIndex = data.length() - 1;
+
+    for (int i = 0; i <= maxIndex && found <= index; i++) {
+        if (data.charAt(i) == separator || i == maxIndex) {
+            found++;
+            strIndex[0] = strIndex[1] + 1;
+            strIndex[1] = (i == maxIndex) ? i+1 : i;
+        }
+    }
+    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+}
 
 //Función que se llama cuando se desea enviar un socket
 void onWebSocketEvent(uint8_t num,
@@ -67,11 +95,21 @@ void onWebSocketEvent(uint8_t num,
     case WStype_TEXT:
 
       if(strcmp((char *) payload, "Ping?") == 0){
-        webSocket.sendTXT(num, "Pong.");
-      }
-      else{
+        webSocket.sendTXT(num, "Pong.");}
+     
+      if(payload_str.indexOf("INTERVAL START") >= 0){
+      
+         hour = getValue(payload_str, ':', 1).toInt();
+         minute = getValue(payload_str, ':', 2).toInt();
+         intervalo = getValue(payload_str, ':', 3).toInt();
+
+      }    
+
+  
+
+
       Serial.printf("[%u] Text: %s\n", num, payload);
-      webSocket.sendTXT(num, payload);}
+      webSocket.sendTXT(num, payload);
       break;
 
     // For everything else: do nothing
@@ -239,10 +277,14 @@ MotoBomba bombaAgua;
 
 // ### Funciones auxiliares ### //
 
+
 // ### MAIN ### //
 void setup()
 {
   Serial.begin(9600);
+
+  //Hora inicial 
+  rtc.setTime();
 
   //Ajustes pantalla OLED
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
@@ -307,12 +349,13 @@ void loop()
   serializeJson(doc, str_doc);
   webSocket.broadcastTXT(str_doc);
 
-
+  String formattedTime = rtc.getTime();
   //Sección
-  display.setTextSize(1);             // Normal 1:1 pixel scale
+  display.clearDisplay();
+  display.setTextSize(2.5);             // Normal 1:1 pixel scale
   display.setTextColor(SSD1306_WHITE);        // Draw white text
-  display.setCursor(0,0);             // Start at top-left corner
-  display.println(F("RemotePet"));
+  display.setCursor(0,16);             // Start at top-left corner
+  display.println(formattedTime);
   display.display();
 
 
