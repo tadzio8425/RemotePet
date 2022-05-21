@@ -53,12 +53,16 @@ public class SensorStatusActivity extends AppCompatActivity {
         ProgressBar roomTemp = (ProgressBar) findViewById(R.id.ambTemp_bar);
         TextView roomPercentageView = (TextView) findViewById(R.id.ambTemp_progress_percentage);
 
+        ProgressBar petTemp = (ProgressBar) findViewById(R.id.petTemp_bar);
+        TextView petTempPercentageView = (TextView) findViewById(R.id.petTemp_progress_percentage);
+
 
         //Desempaquetamiento de los valores de los sensores
         int light_sensor = 0;
         int water_sensor = 0;
         int weight_sensor = 0;
         int room_temp_sensor = 0;
+        int pet_temp_sensor = 0;
 
         try {
             JSONObject sensors_json = root_json.getJSONObject("Sensors");
@@ -66,6 +70,7 @@ public class SensorStatusActivity extends AppCompatActivity {
             weight_sensor = stringToInt(sensors_json.getString("Weight"));
             water_sensor = stringToInt(sensors_json.getString("Water"));
             room_temp_sensor = stringToInt(sensors_json.getString("AmbTemp"));
+            pet_temp_sensor = stringToInt(sensors_json.getString("PetTemp"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,6 +89,9 @@ public class SensorStatusActivity extends AppCompatActivity {
 
         roomTemp.setProgress(room_temp_sensor);
         roomPercentageView.setText(roomTemp.getProgress() + "C°");
+
+        petTemp.setProgress(pet_temp_sensor);
+        petTempPercentageView.setText(petTemp.getProgress() + "C°");
 
 
 
