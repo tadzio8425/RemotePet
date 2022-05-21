@@ -158,6 +158,7 @@ int last_pos = 0;
 //Tiempo para motores
 unsigned long previousMillis = 0;  
 const long food_interval = 10000;  
+bool only_pass = true;
 
 
 // ### Lista de clases ### //
@@ -196,11 +197,11 @@ public:
   float getLight(){
     int light = getLux();
     
-    if (light > 7600){
-      light = 7600;
+    if (light > 2200){
+      light = 2200;
     }
 
-    return light/76;
+    return light/22;
   }
 private:
 
@@ -381,20 +382,25 @@ void loop()
 
   unsigned long currentMillis = millis();
   
+  if(rtc.getHour() == hour && rtc.getMinute() == minute){
+    
     if (currentMillis - previousMillis >= food_interval) {
       // save the last time you blinked the LED
       previousMillis = currentMillis;
 
-      if(rtc.getHour() == hour && rtc.getMinute() == minute){
       
-      if(last_pos == 60){ 
-      foodServo.setPosition(110);}
+      if(last_pos == 60 && only_pass == true){ 
+      foodServo.setPosition(110);
+      only_pass = false;}
 
       else{
         foodServo.setPosition(60);
       }
   }}
 
+  if(rtc.getHour() == hour && rtc.getMinute() == minute+1){
+    only_pass = true;
+  }
 
     
 }
