@@ -161,7 +161,7 @@ class WaterSensor{
       float waterLevel;
 
       if(analogRead(_analogPin) > 1000){
-        waterLevel = (analogRead(_analogPin)-2385.3)/1.7371;
+        waterLevel = (analogRead(_analogPin)-650)/4.0909;
       }
       else{
         waterLevel = 0;
@@ -428,6 +428,7 @@ void loop()
   if(rtc.getHour() == hour && rtc.getMinute() == minute+1){
     only_pass = true;
   }
+
 
     
 }
