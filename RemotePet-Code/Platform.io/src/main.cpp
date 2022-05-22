@@ -100,9 +100,14 @@ int last_pos = 0;
 
 //Tiempo para motores
 unsigned long previousMillis = 0;  
-const long food_interval = 10000;  
-const long auto_interval = 15000;
+long timed_interval = 0;  
+long auto_interval = 0;
 bool only_pass = true;
+int timed_kibble_amount;
+int timed_water_amount;
+int auto_kibble_amount;
+int auto_water_amount;
+
 
 //Variable para activar feed por proximidad
 int autoFeed = 0;
@@ -243,7 +248,14 @@ PIR movementSensor;
 MotoBomba bombaAgua;
 
 
+//Funciones para obtener los intervalos según la porción deseada
+int foodAmountToInterval(int amount){
+  return amount;
+}
 
+int waterVolumeToInterval(int volume){
+  return volume*0.0758*1000;
+}
 
 //Función que se llama cuando se desea enviar un socket
 void onWebSocketEvent(uint8_t num,
@@ -281,6 +293,10 @@ void onWebSocketEvent(uint8_t num,
          hour = getValue(payload_str, ':', 1).toInt();
          minute = getValue(payload_str, ':', 2).toInt();
          intervalo = getValue(payload_str, ':', 3).toInt();
+         timed_kibble_amount = getValue(payload_str, ':', 4).toInt();
+         timed_water_amount = getValue(payload_str, ':', 5).toInt();
+
+         timed_interval = waterVolumeToInterval(timed_water_amount);
 
       }    
 
@@ -306,6 +322,10 @@ void onWebSocketEvent(uint8_t num,
 
       if(payload_str.indexOf("AUTO") >= 0){
         autoFeed = getValue(payload_str, ':', 1).toInt();
+        auto_kibble_amount = getValue(payload_str, ':', 2).toInt();
+        auto_water_amount = getValue(payload_str, ':', 3).toInt();
+        auto_interval = waterVolumeToInterval(auto_water_amount);
+        
       }
 
 
@@ -416,7 +436,7 @@ void loop()
 
   if(rtc.getHour() == hour && rtc.getMinute() == minute){
     
-    if (currentMillis - previousMillis >= food_interval) {
+    if (currentMillis - previousMillis >= timed_interval) {
       // save the last time you blinked the LED
       previousMillis = currentMillis;
 
