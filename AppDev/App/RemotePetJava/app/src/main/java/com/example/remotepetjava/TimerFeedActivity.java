@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TimePicker;
 
@@ -46,7 +47,11 @@ public class TimerFeedActivity extends AppCompatActivity {
         Slider hourly_slider = (Slider) findViewById(R.id.slider);
         float hourly_interval = hourly_slider.getValue();
 
-        MainActivity.webSocketClient.send("INTERVAL START"+":"+hour+":"+minute+":"+hourly_interval);
+        //Obtener los valores de la porción
+        EditText kibbleAmount = (EditText)  findViewById(R.id.editTextKibble2);
+        EditText waterVolume = (EditText)  findViewById(R.id.editTextWater2);
+
+        MainActivity.webSocketClient.send("INTERVAL START"+":"+hour+":"+minute+":"+hourly_interval+":"+kibbleAmount.getText()+":"+waterVolume.getText());
 
     };
 }
