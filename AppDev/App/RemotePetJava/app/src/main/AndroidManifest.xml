@@ -12,15 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RemotePetJava">
         <activity
+            android:name=".ManualFeed"
+            android:exported="false"
+            android:label="Manual Feed">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
             android:name=".TimerFeedActivity"
             android:exported="false"
             android:label="Timer Feed">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".MainActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
-
-
         <activity
             android:name=".CameraView"
             android:exported="false"

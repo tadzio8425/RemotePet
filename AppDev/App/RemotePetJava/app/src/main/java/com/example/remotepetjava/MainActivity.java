@@ -92,6 +92,11 @@ public class MainActivity extends AppCompatActivity {
         webSocketClient.connect();
     }
 
+    public void openManualFeed(View view){
+        Intent intent = new Intent(this, ManualFeed.class);
+        startActivity(intent);
+    }
+
 
 
 

@@ -68,63 +68,6 @@ String getValue(String data, char separator, int index)
 
 
 
-//Función que se llama cuando se desea enviar un socket
-void onWebSocketEvent(uint8_t num,
-                      WStype_t type,
-                      uint8_t * payload,
-                      size_t length) {
-
-  String payload_str = String((char*) payload);
-
-  // Figure out the type of WebSocket event
-  switch(type) {
-
-    // Client has disconnected
-    case WStype_DISCONNECTED:
-      Serial.printf("[%u] Disconnected!\n", num);
-      break;
-
-    // New client has connected
-    case WStype_CONNECTED:
-      {
-        IPAddress ip = webSocket.remoteIP(num);
-        Serial.printf("[%u] Connection from ", num);
-        Serial.println(ip.toString());
-      }
-      break;
-
-    // Echo text message back to client
-    case WStype_TEXT:
-
-      if(strcmp((char *) payload, "Ping?") == 0){
-        webSocket.sendTXT(num, "Pong.");}
-     
-      if(payload_str.indexOf("INTERVAL START") >= 0){
-      
-         hour = getValue(payload_str, ':', 1).toInt();
-         minute = getValue(payload_str, ':', 2).toInt();
-         intervalo = getValue(payload_str, ':', 3).toInt();
-
-      }    
-
-  
-
-
-      Serial.printf("[%u] Text: %s\n", num, payload);
-      webSocket.sendTXT(num, payload);
-      break;
-
-    // For everything else: do nothing
-    case WStype_BIN:
-    case WStype_ERROR:
-    case WStype_FRAGMENT_TEXT_START:
-    case WStype_FRAGMENT_BIN_START:
-    case WStype_FRAGMENT:
-    case WStype_FRAGMENT_FIN:
-    default:
-      break;
-  }
-}
 
 
 
@@ -296,6 +239,88 @@ PIR movementSensor;
 MotoBomba bombaAgua;
 
 
+
+
+//Función que se llama cuando se desea enviar un socket
+void onWebSocketEvent(uint8_t num,
+                      WStype_t type,
+                      uint8_t * payload,
+                      size_t length) {
+
+  String payload_str = String((char*) payload);
+
+  // Figure out the type of WebSocket event
+  switch(type) {
+
+    // Client has disconnected
+    case WStype_DISCONNECTED:
+      Serial.printf("[%u] Disconnected!\n", num);
+      break;
+
+    // New client has connected
+    case WStype_CONNECTED:
+      {
+        IPAddress ip = webSocket.remoteIP(num);
+        Serial.printf("[%u] Connection from ", num);
+        Serial.println(ip.toString());
+      }
+      break;
+
+    // Echo text message back to client
+    case WStype_TEXT:
+
+      if(strcmp((char *) payload, "Ping?") == 0){
+        webSocket.sendTXT(num, "Pong.");}
+     
+      if(payload_str.indexOf("INTERVAL START") >= 0){
+      
+         hour = getValue(payload_str, ':', 1).toInt();
+         minute = getValue(payload_str, ':', 2).toInt();
+         intervalo = getValue(payload_str, ':', 3).toInt();
+
+      }    
+
+      if(payload_str.indexOf("WATER") >= 0){
+        int waterManual = getValue(payload_str, ':', 1).toInt();
+        if(waterManual == 1){
+          bombaAgua.turnOn();
+        }
+        else{
+          bombaAgua.turnOff();
+        }
+      }    
+
+      if(payload_str.indexOf("KIBBLE") >= 0){
+        int kibbleManual = getValue(payload_str, ':', 1).toInt();
+        if(kibbleManual == 1){
+          foodServo.setPosition(110);
+        }
+        else{
+          foodServo.setPosition(60);
+        }
+      }   
+
+
+  
+
+
+      Serial.printf("[%u] Text: %s\n", num, payload);
+      webSocket.sendTXT(num, payload);
+      break;
+
+    // For everything else: do nothing
+    case WStype_BIN:
+    case WStype_ERROR:
+    case WStype_FRAGMENT_TEXT_START:
+    case WStype_FRAGMENT_BIN_START:
+    case WStype_FRAGMENT:
+    case WStype_FRAGMENT_FIN:
+    default:
+      break;
+  }
+}
+
+
 // ### Funciones auxiliares ### //
 
 
@@ -391,10 +416,12 @@ void loop()
       
       if(last_pos == 60 && only_pass == true){ 
       foodServo.setPosition(110);
+      bombaAgua.turnOn();
       only_pass = false;}
 
       else{
         foodServo.setPosition(60);
+        bombaAgua.turnOff();
       }
   }}
 
