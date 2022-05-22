@@ -36,8 +36,7 @@ public class MainActivity extends AppCompatActivity {
         updateAlerts(null);
     }
 
-    @Override
-    protected void on() {
+    @Override protected void onDestroy() {
         super.onDestroy();
         webSocketClient.close();
     }
