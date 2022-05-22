@@ -101,7 +101,11 @@ int last_pos = 0;
 //Tiempo para motores
 unsigned long previousMillis = 0;  
 const long food_interval = 10000;  
+const long auto_interval = 15000;
 bool only_pass = true;
+
+//Variable para activar feed por proximidad
+int autoFeed = 0;
 
 
 // ### Lista de clases ### //
@@ -300,8 +304,10 @@ void onWebSocketEvent(uint8_t num,
         }
       }   
 
+      if(payload_str.indexOf("AUTO") >= 0){
+        autoFeed = getValue(payload_str, ':', 1).toInt();
+      }
 
-  
 
 
       Serial.printf("[%u] Text: %s\n", num, payload);
@@ -396,7 +402,8 @@ void loop()
   webSocket.broadcastTXT(str_doc);
 
   String formattedTime = rtc.getTime();
-  //Sección
+
+  //Configuración del display
   display.clearDisplay();
   display.setTextSize(2.5);             // Normal 1:1 pixel scale
   display.setTextColor(SSD1306_WHITE);        // Draw white text
@@ -404,16 +411,15 @@ void loop()
   display.println(formattedTime);
   display.display();
 
-
+  //Configuración del timer feed
   unsigned long currentMillis = millis();
-  
+
   if(rtc.getHour() == hour && rtc.getMinute() == minute){
     
     if (currentMillis - previousMillis >= food_interval) {
       // save the last time you blinked the LED
       previousMillis = currentMillis;
 
-      
       if(last_pos == 60 && only_pass == true){ 
       foodServo.setPosition(110);
       bombaAgua.turnOn();
@@ -424,11 +430,29 @@ void loop()
         bombaAgua.turnOff();
       }
   }}
-
   if(rtc.getHour() == hour && rtc.getMinute() == minute+1){
     only_pass = true;
   }
 
+  //Configuración del autofeed
+  if(movementSensor.isMovement()==1 and autoFeed == 1){
+        if (currentMillis - previousMillis >= auto_interval) {
+      // save the last time you blinked the LED
+      previousMillis = currentMillis;
+
+      if(last_pos == 60){ 
+      foodServo.setPosition(110);
+      bombaAgua.turnOn();}
+
+      else{
+        foodServo.setPosition(60);
+        bombaAgua.turnOff();
+        currentMillis+=auto_interval;
+      }
+  }
+  }
+  
+  }
+
 
     
-}

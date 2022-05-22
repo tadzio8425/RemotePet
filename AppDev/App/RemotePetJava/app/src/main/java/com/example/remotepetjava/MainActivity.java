@@ -36,6 +36,13 @@ public class MainActivity extends AppCompatActivity {
         updateAlerts(null);
     }
 
+    @Override
+    protected void on() {
+        super.onDestroy();
+        webSocketClient.close();
+    }
+
+
     public void updateAlerts(View view) {
 
         webSocketClient.send("Ping?");
@@ -97,6 +104,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+    public void openAutoFeed(View view){
+        Intent intent = new Intent(this, AutoFeed.class);
+        startActivity(intent);
+    }
 
 
 

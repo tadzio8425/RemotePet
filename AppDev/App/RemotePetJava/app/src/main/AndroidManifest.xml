@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RemotePetJava">
         <activity
+            android:name=".AutoFeed"
+            android:exported="false"
+            android:label="Auto Feed">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+
+        </activity>
+        <activity
             android:name=".ManualFeed"
             android:exported="false"
             android:label="Manual Feed">
